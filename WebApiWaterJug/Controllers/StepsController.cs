@@ -19,9 +19,8 @@ namespace WebApiWaterJug.Controllers
                 response.message = "No solution";
                 return Ok(response);
             }
-            //Step[] steps = new Step[] { new Step { bucketX = x, bucketY = y, explanation = z.ToString() } };
-            Step[] stepsA = Solve(x, y, z, "bucket x", "bucket y");
-            Step[] stepsB = Solve(y, x, z, "bucket y", "bucket x");
+            Step[] stepsA = Solve(x, y, z, "bucket x", "bucket y", 1);
+            Step[] stepsB = Solve(y, x, z, "bucket y", "bucket x",2);
             if (stepsA != null || stepsB != null)
             {
                 response.status = "success";
@@ -42,14 +41,21 @@ namespace WebApiWaterJug.Controllers
             return Ok(response);
         }
 
-        private Step[] Solve(int number1, int number2, int total, string bucketA, string bucketB)
+        private Step[] Solve(int number1, int number2, int total, string bucketA, string bucketB, int pass)
         {
             int a = number1;
             int b = 0;
             int diff;
             string explanation = "Fill " + bucketA;
             List<Step> steps = new List<Step>();
-            steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+            if (pass == 1)
+            {
+                steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+            }
+            else
+            {
+                steps.Add(new Step { bucketY = a, bucketX = b, explanation = explanation });
+            }
             while (!(a == total || b == total))
             {
                 diff = 0;
@@ -61,7 +67,14 @@ namespace WebApiWaterJug.Controllers
                         b = b + diff;
                         a = a - diff;
                         explanation = "Transfer " + bucketA + " to " + bucketB;
-                        steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                        if (pass == 1)
+                        {
+                            steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                        }
+                        else
+                        {
+                            steps.Add(new Step { bucketY = a, bucketX = b, explanation = explanation });
+                        }
                     }
                     else
                     {
@@ -70,7 +83,14 @@ namespace WebApiWaterJug.Controllers
                         {
                             b = 0;
                             explanation = "Dump " + bucketB;
-                            steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                            if (pass == 1)
+                            {
+                                steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                            }
+                            else
+                            {
+                                steps.Add(new Step { bucketY = a, bucketX = b, explanation = explanation });
+                            }
                         }
                         else
                         {
@@ -85,7 +105,14 @@ namespace WebApiWaterJug.Controllers
                                 a = a - diff;
                             }
                             explanation = "Transfer " + bucketA + " to " + bucketB;
-                            steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                            if (pass == 1)
+                            {
+                                steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                            }
+                            else
+                            {
+                                steps.Add(new Step { bucketY = a, bucketX = b, explanation = explanation });
+                            }
                         }
                     }
                 }
@@ -96,7 +123,14 @@ namespace WebApiWaterJug.Controllers
                     {
                         b = 0;
                         explanation = "Dump " + bucketB;
-                        steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                        if (pass == 1)
+                        {
+                            steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                        }
+                        else
+                        {
+                            steps.Add(new Step { bucketY = a, bucketX = b, explanation = explanation });
+                        }
                     }
                     else
                     {
@@ -111,14 +145,28 @@ namespace WebApiWaterJug.Controllers
                             a = a - diff;
                         }
                         explanation = "Transfer " + bucketA + " to " + bucketB;
-                        steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                        if (pass == 1)
+                        {
+                            steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                        }
+                        else
+                        {
+                            steps.Add(new Step { bucketY = a, bucketX = b, explanation = explanation });
+                        }
                     }
                 }
                 if (a == 0 && b != total)
                 {
                     a = number1;
                     explanation = "Fill " + bucketA;
-                    steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                    if (pass == 1)
+                    {
+                        steps.Add(new Step { bucketX = a, bucketY = b, explanation = explanation });
+                    }
+                    else
+                    {
+                        steps.Add(new Step { bucketY = a, bucketX = b, explanation = explanation });
+                    }
                     if (b == number2)
                     {
                         steps = null;
@@ -129,7 +177,8 @@ namespace WebApiWaterJug.Controllers
             if (steps != null)
             {
                 return steps.ToArray();
-            } else
+            }
+            else
             {
                 return null;
             }
