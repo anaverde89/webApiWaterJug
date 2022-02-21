@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Water Jug Riddle</title>
+</head>
+<body>
+    <div>
+        <h2>Parameters</h2>
+        <input type="text" id="bucketX" size="5" />
+        <input type="text" id="bucketY" size="5" />
+        <input type="text" id="measure" size="5" />
+        <input type="button" value="Submit" onclick="solve();" />
+        <p id="step" />
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        var uri = "api/steps";
+        function solve() {
+            //var x = $('#bucketX').val() == "" ? 0 : $('#bucketX').val();
+            //var y = $('#bucketY').val() == "" ? 0 : $('#bucketY').val();
+            //var z = $('#measure').val() == "" ? 0 : $('#measure').val();
+            var x = $('#bucketX').val();
+            var y = $('#bucketY').val();
+            var z = $('#measure').val();
+            $.getJSON(uri + '/' + x + '/' + y + '/'+z)
+                .done(function (data) {
+                    if (data.status == "success") {
+                        $('#step').text(data.steps[0].bucketX + ';' + data.steps[0].bucketY + ';' + data.steps[0].explanation);
+                    } else {
+                        $('#step').text(data.message);
+                    }
+                    
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#step').text('Error: ' + err);
+                });
+        }
+    </script>
+</body>
+</html>

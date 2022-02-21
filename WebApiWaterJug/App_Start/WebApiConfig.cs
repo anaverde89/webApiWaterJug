@@ -16,8 +16,8 @@ namespace WebApiWaterJug
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "api/{controller}/{x}/{y}/{z}",
+                defaults: new { x = RouteParameter.Optional, y = RouteParameter.Optional, z = RouteParameter.Optional }
             );
         }
     }
