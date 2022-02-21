@@ -24,3 +24,4 @@ NOTE: Although the parameters are optional, if they are not placed, the response
 
 I used the [Microsoft documentation](https://docs.microsoft.com/es-mx/aspnet/web-api/overview/getting-started-with-aspnet-web-api/tutorial-your-first-web-api) as a reference. I did not use Net Core since the version installed on my computer is Visual Studio 2017.
 
+P.D.: it is very likely that it can be solved in a more efficient way 😅
