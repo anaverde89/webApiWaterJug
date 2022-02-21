@@ -7,35 +7,84 @@
 <body>
     <div>
         <h2>Parameters</h2>
-        <input type="text" id="bucketX" size="5" />
-        <input type="text" id="bucketY" size="5" />
-        <input type="text" id="measure" size="5" />
-        <input type="button" value="Submit" onclick="solve();" />
+        <div>
+            <label for="bucketX">Bucket X</label>
+            <input type="text" id="bucketX" size="5" />
+        </div>
+        <div>
+            <label for="bucketY">Bucket Y</label>
+            <input type="text" id="bucketY" size="5" />
+        </div>
+        <div>
+            <label for="measure">Measure</label>
+            <input type="text" id="measure" size="5" />
+        </div>
+        <div>
+            <input type="button" value="Submit" onclick="solve();" />
+        </div>
+        <table>
+            <thead>
+            <th>Bucket X</th>
+            <th>Bucket Y</th>
+            <th>Explanation</th>
+            </thead>
+            <tbody id="cuerpo"></tbody>
+        </table>
         <p id="step" />
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         var uri = "api/steps";
         function solve() {
-            //var x = $('#bucketX').val() == "" ? 0 : $('#bucketX').val();
-            //var y = $('#bucketY').val() == "" ? 0 : $('#bucketY').val();
-            //var z = $('#measure').val() == "" ? 0 : $('#measure').val();
             var x = $('#bucketX').val();
             var y = $('#bucketY').val();
             var z = $('#measure').val();
-            $.getJSON(uri + '/' + x + '/' + y + '/'+z)
+            $("#cuerpo").html("");
+            $('#step').text("");
+            $.getJSON(uri + '/' + x + '/' + y + '/' + z)
                 .done(function (data) {
                     if (data.status == "success") {
-                        $('#step').text(data.steps[0].bucketX + ';' + data.steps[0].bucketY + ';' + data.steps[0].explanation);
+                        $.each(data.steps, function (key, item) {
+                            var tr = '<tr><td>' + item.bucketX + '</td><td>' + item.bucketY + '</td><td>' + item.explanation + '</td></tr>';
+                            $("#cuerpo").append(tr)
+                        });
                     } else {
                         $('#step').text(data.message);
                     }
-                    
+
                 })
                 .fail(function (jqXHR, textStatus, err) {
                     $('#step').text('Error: ' + err);
                 });
         }
     </script>
+    <style>
+        table {
+            table-layout: fixed;
+            width: 50%;
+            border-collapse: collapse;
+            border: 1px solid;
+        }
+
+        thead th:nth-child(1) {
+            width: 20%;
+        }
+
+        thead th:nth-child(2) {
+            width: 20%;
+        }
+
+        thead th:nth-child(3) {
+            width: 60%;
+        }
+
+        th, td {
+            padding: 5px;
+            border:1px solid;
+        }
+        div {
+            margin:5px;
+        }
+    </style>
 </body>
 </html>
